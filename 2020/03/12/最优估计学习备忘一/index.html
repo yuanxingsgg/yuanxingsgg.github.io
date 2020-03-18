@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/banya.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/banya.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="基础理论篇最小二乘估计1）最小二乘估计方法由德国数学家高斯提出，估计准则为残差（测绘中称为改正数）的平方和达到最小。假定有一个数学模型为  Z_{l×1}&#x3D;H_{l×n}X_{n×1}+\nabla_{l×1} \quad (1.1) E(Z)&#x3D;HX \quad var(Z)&#x3D;D \quad (1.2)若现在通过某种方法得到参数估计$\hat{X}$，代入观测方程后可得到估计的观测值：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最优估计学习备忘一">
+<meta property="og:url" content="http://yoursite.com/2020/03/12/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%80/index.html">
+<meta property="og:site_name" content="Li&#39;s World">
+<meta property="og:description" content="基础理论篇最小二乘估计1）最小二乘估计方法由德国数学家高斯提出，估计准则为残差（测绘中称为改正数）的平方和达到最小。假定有一个数学模型为  Z_{l×1}&#x3D;H_{l×n}X_{n×1}+\nabla_{l×1} \quad (1.1) E(Z)&#x3D;HX \quad var(Z)&#x3D;D \quad (1.2)若现在通过某种方法得到参数估计$\hat{X}$，代入观测方程后可得到估计的观测值：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-12T07:03:51.000Z">
+<meta property="article:modified_time" content="2020-03-18T06:43:13.635Z">
+<meta property="article:author" content="Li">
+<meta property="article:tag" content="最优估计">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/12/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>最优估计学习备忘一 | Li's World</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Li's World</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">Tech otakus save the world</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="search-pop-overlay">
+  <div class="popup search-popup">
+      <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+  </div>
+</div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/12/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/banya.jpg">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Li's World">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最优估计学习备忘一
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-12 15:03:51" itemprop="dateCreated datePublished" datetime="2020-03-12T15:03:51+08:00">2020-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-18 14:43:13" itemprop="dateModified" datetime="2020-03-18T14:43:13+08:00">2020-03-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">最优估计</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/03/12/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%80/" class="post-meta-item leancloud_visitors" data-flag-title="最优估计学习备忘一" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">评论数：</span>
+    
+    <a title="valine" href="/2020/03/12/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%80/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/12/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%80/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="基础理论篇"><a href="#基础理论篇" class="headerlink" title="基础理论篇"></a>基础理论篇</h1><h2 id="最小二乘估计"><a href="#最小二乘估计" class="headerlink" title="最小二乘估计"></a>最小二乘估计</h2><p>1）最小二乘估计方法由德国数学家高斯提出，估计准则为残差（测绘中称为改正数）的平方和达到最小。假定有一个数学模型为</p>
+<script type="math/tex; mode=display">
+Z_{l×1}=H_{l×n}X_{n×1}+\nabla_{l×1} \quad (1.1)</script><script type="math/tex; mode=display">
+E(Z)=HX \quad var(Z)=D \quad (1.2)</script><p>若现在通过某种方法得到参数估计$\hat{X}$，代入观测方程后可得到估计的观测值：<br><a id="more"></a></p>
+<script type="math/tex; mode=display">
+\hat{Z}_{l×1}=H_{l×n}\hat{X}_{n×1} \quad (1.3)</script><p>那么估计的观测值与实际观测值的差异为</p>
+<script type="math/tex; mode=display">
+v=\hat{Z}-Z=H\hat{X}-Z \quad (1.4)</script><p>其中</p>
+<script type="math/tex; mode=display">
+v=[v_1\quad v_2 \quad v_3 \quad \cdots \quad v_l]^T\quad (1.5)</script><p>上式中$v_i$表示观测值$Z_i$的残差，$v$也称为观测值的残差向量。要使观测值的残差平方和最小，即</p>
+<script type="math/tex; mode=display">
+\sum\limits_{i=1}^{i=l}v_i^2=min\quad (1.6)</script><p>向量的形式为</p>
+<script type="math/tex; mode=display">
+v^Tv=min\quad (1.7)</script><p>在方程（1.4）的无穷多组解中，能满足（1.6）的解即为最小二乘解$\hat{X}_{LS}$。</p>
+<p>式1.6的准则认为所有观测值$Z_1,Z_2,\cdots,Z_l$对参数的影响相同，但有的时候观测值是不同精度的，所以在估计时我们希望精度好的观测值对参数估计的影响大，即方差小的观测值对参数估计的影响大，反之方差大的对参数估计的影响小，所以在式1.6的基础上根据观测值的方差赋予观测值一定的权重。权矩阵可设为</p>
+<script type="math/tex; mode=display">
+W=\sigma_0^2D^{-1}\quad (1.8)</script><p>，可证明$\sigma_0^2$的取值不影响最小二乘参数估计值，所以$\sigma_0^2$可以取任意实常数。亦可证明若观测值相互独立，$W$为对角矩阵</p>
+<script type="math/tex; mode=display">
+W=\begin{bmatrix}W_1& \quad & \quad & \quad \\
+ \quad &W_2 &\quad  &\quad \\
+\quad &\quad &\cdots &\quad \\
+\quad &\quad &\quad &W_l \end{bmatrix}=\begin{bmatrix}\frac{\sigma_0^2}{\sigma_1^2}& \quad & \quad & \quad \\
+ \quad &\frac{\sigma_0^2}{\sigma_2^2} &\quad  &\quad \\
+\quad &\quad &\frac{\sigma_0^2}{\sigma_3^2} &\quad \\
+\quad &\quad &\quad&\frac{\sigma_0^2}{\sigma_4^2} \end{bmatrix}\quad (1.9)</script><p>可以看到观测值的权与其方差成反比。</p>
+<p>$W$为对角矩阵时最小二乘准则为</p>
+<script type="math/tex; mode=display">
+\sum\limits_{i=1}^{i=l}v_i^2W_i=min\quad (1.10)</script><p>最小二乘准则更一般的形式为</p>
+<script type="math/tex; mode=display">
+v^TWv=min\quad (1.11)</script><p>现建立满足最小二乘准则的目标方程</p>
+<script type="math/tex; mode=display">
+\Phi(\hat{X})=v^TWv=min\quad (1.12)</script><p>将误差方程1.4代入目标函数1.12</p>
+<script type="math/tex; mode=display">
+\Phi(\hat{X})=（H\hat{X}-Z）^TW（H\hat{X}-Z）=\hat{X}^TH^TWH\hat{X}-\hat{X}^TH^TWZ-Z^TWH\hat{X}+Z^TWZ\quad (1.13)</script><p>$\Phi(\hat{X})$是$\hat{X}$的函数，为了使其最小，由求函数极值方法（此方程可看成开口向上的二次函数，有极小值）得到</p>
+<script type="math/tex; mode=display">
+\frac{\partial\Phi(\hat{X})}{\partial\hat{X}}=2H^TWH\hat{X}-2H^TWZ=0\quad (1.14)</script><p>由于$H$为列满秩矩阵，$W$为对称方阵，所以$H^TWH$为满秩矩阵（可逆），方程有解且唯一，解得</p>
+<script type="math/tex; mode=display">
+\hat{X}_{LS}=(H^TWH)^{-1}H^TWZ\quad (1.15)</script><p>$\hat{X}_{LS}$即为满足最小二乘估计准则的解，式1.8代入式1.15得</p>
+<script type="math/tex; mode=display">
+\hat{X}_{LS}=(H^T\sigma_0^2D^{-1}H)^{-1}H^T\sigma_0^2D^{-1}Z=(H^TD^{-1}H)^{-1}H^TD^{-1}Z\quad (1.16)</script><p>由此证明$\sigma_0^2$的数值不影响$\hat{X}_{LS}$，$\hat{X}_{LS}$的值由设计矩阵$H$、观测值$Z$和观测值的方差矩阵$D$决定。</p>
+<p>易证最小二乘估计为无偏估计且残差$v$与$\hat{X}_{LS}$不相关。</p>
+<p>2）附有约束条件的最小二乘估计</p>
+<p>线性化后的附有参数约束条件的函数模型为</p>
+<script type="math/tex; mode=display">
+\mathop{z}\limits_{l×1}=\mathop{H}\limits_{l×n}\mathop{x}\limits_{n×1}+\mathop{\Delta}\limits_{l×1}\\\mathop{C}\limits_{c×n}\mathop{x}\limits_{n×1}+\mathop{\varphi}\limits_{c×1}(X_0)=0</script><p>$H$为列满秩矩阵，$C$为行满秩矩阵，其秩为参数的约束条件的个数。</p>
+<p>随机模型为</p>
+<script type="math/tex; mode=display">
+E(z)=HX \quad var(z)=D</script><p>现假设估计得到的$x$为$\hat{x}_{LS}$，那么误差修正后的观测值</p>
+<script type="math/tex; mode=display">
+\hat{z}=H\hat{x}_{LS}</script><p>观测值的残差为</p>
+<script type="math/tex; mode=display">
+v=H\hat{x}_{LS}-z</script><p>$\hat{x}_{LS}$同时满足约束条件</p>
+<script type="math/tex; mode=display">
+C\hat{x}_{LS}+\varphi(X_0)=0</script><p>联立上两式得到</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}I&-H\\0&C\end{bmatrix}\begin{bmatrix}v\\\hat{x}_{LS}\end{bmatrix}=\begin{bmatrix}-Z\\-\varphi(X_0)\end{bmatrix}</script><p>依题可知上式是有无穷组解的相容方程，现在要在这无穷多组解中找到能够满足最小二乘准则$v^TWv=min$并满足约束条件的一组解，按拉格朗日条件极值法构造方程</p>
+<script type="math/tex; mode=display">
+\Phi(\hat{x})=v^TWv+2K^T(Cx+\varphi(X_0))</script><p>约束条件代入上式可得</p>
+<script type="math/tex; mode=display">
+\Phi(\hat{x})=\hat{x}_{LS}^TH^TWH\hat{x}_{LS}-\hat{x}_{LS}^TH^TWz-z^TWH\hat{x}_{LS}+z^TWz+2K^T(Cx+\varphi(X_0))</script><p>上式对$x$求导并令其为零可得</p>
+<script type="math/tex; mode=display">
+H^TWH\hat{x}_{LS}-H^TWz+C^TK=0</script><p>与约束条件联立有</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}H^TWH&C^T\\C&0\end{bmatrix}\begin{bmatrix}\hat{x}_{LS}\\K\end{bmatrix}=\begin{bmatrix}H^TWz\\-\varphi(X_0)\end{bmatrix}</script><p>解得附有约束条件的最小二乘估计 $\hat{x}_{LS}$</p>
+<script type="math/tex; mode=display">
+\begin{cases}K=(C(H^TWH)^{-1}C^T)^{-1}(C(H^TWH)^{-1}HWz+\varphi(X_0))\\\hat{x}_{LS}=((H^TWH)^{-1}-(H^TWH)^{-1}C^T(C(H^TWH)^{-1}C^T)^{-1}C(H^TWH)^{-1})HWz\\-(H^TWH)^{-1}C^TC(H^TWH)^{-1}C^T)^{-1}\varphi(X_0)\end{cases}</script><p>3）递推最小二乘估计</p>
+<p>上面介绍得两种最小二乘估计方法是集中所有观测值对参数进行估计得方法，即批处理方法。该方法会占用计算机的大量内存，不能实时对数据进行处理，解决这个问题的方法是采用最小二乘的递推算法。</p>
+<p>设在第$k$次观测后，观测值$z_k$对应的误差方程为</p>
+<script type="math/tex; mode=display">
+V_k=H_k\hat{X}-Z_k</script><p>观测值向量$Z_k$的方差阵为$D_k$，权矩阵为$W_k=\sigma_0^2D_k$，因此这时参数的最小二乘解为</p>
+<script type="math/tex; mode=display">
+\hat{X}_{B(k)}=(H_k^TW_kH_k)^{-1}H_k^TW_kZ_k</script><p>$k+1$次观测值向量为$z_{k+1}$，对应的误差方程为</p>
+<script type="math/tex; mode=display">
+v_{k+1}=h_{k+1}\hat{X}-z_{k+1}</script><p>观测值$z_{k+1}$的方差阵为$d_{k+1}$，权矩阵为$w_{k+1}=\sigma_0^2d_{k+1}^{-1}$。现集中所有的观测值，数量为$l_{k+1}$，构成观测值向量$Z_{k+1}=[Z_k \quad z_{k+1}]^T$，其对应的误差方程为</p>
+<script type="math/tex; mode=display">
+V_{k+1}=H_{k+1}\hat{X}-Z_{k+1}</script><p>其中</p>
+<script type="math/tex; mode=display">
+V_{k+1}=\begin{bmatrix}V_k\\v_{k+1}\end{bmatrix} \quad H_{k+1}=\begin{bmatrix}H_k\\h_{k+1}\end{bmatrix} \quad Z_{k+1}=\begin{bmatrix}Z_k\\z_{k+1}\end{bmatrix}</script><p>观测值向量$Z_{k+1}$对应的权矩阵为</p>
+<script type="math/tex; mode=display">
+\quad W_{k+1}=\begin{bmatrix}W_k& \quad\\ \quad&w_{k+1}\end{bmatrix}</script><p>以上是批处理算法的数学模型，其参数估计为</p>
+<script type="math/tex; mode=display">
+\hat{X}_{B(k+1)}=(H_{k+1}^TW_{k+1}H_{k+1})^{-1}H_{k+1}^TW_{k+1}Z_{k+1}\\=(H_k^TW_kH_k+h_{k+1}^Tw_{k+1}h_{k+1})^{-1}(H_k^TW_kZ_k+h_{k+1}^Tw_{k+1}z_{k+1})</script><p>又$\hat{X}_{B(k+1)}$的协因数矩阵为</p>
+<script type="math/tex; mode=display">
+Q_{\hat{X}_{B(k+1)}}=(H_k^TW_kH_k+h_{k+1}^Tw_{k+1}h_{k+1})^{-1}=(Q_{\hat{X}_{B(k)}}^{-1}+h_{k+1}^Tw_{k+1}h_{k+1})^{-1}</script><p>代入上一式可得</p>
+<script type="math/tex; mode=display">
+\hat{X}_{B(k+1)}=\hat{X}_{B(k)}+Q_{\hat{X}_{B(k+1)}}h_{k+1}^Tw_{k+1(z_{k+1}-h_{k+1}\hat{X}_{B(k)})}</script><p>上式即为递推最小二乘估计的参数估计式。</p>
+<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>极大似然估计提供了一种给定观测值来评估模型参数的方法，即“模型已定，参数位置”，为了能够估计得到分布中的未知参数$x$，一个自然的想法是一组未知参数的估值$\hat{x}$决定的概率密度函数$p(z/\hat{x})$最大，这意味着这组观测值在这个参数估计下出现的”可能性“的概率最大，即</p>
+<script type="math/tex; mode=display">
+L(x)=p(z/\hat{x})=max</script><p>基于这个准则的方法称为极大似然估计，$L(x)$称为似然函数，它是参数$x$的条件分布。求总体参数$x$的极大似然估计值的问题就是求似然函数$L(x)$的最大值问题。对似然函数求导</p>
+<script type="math/tex; mode=display">
+\frac{\partial p(z/x)}{\partial x}\mid_{x=\hat{x}_{ML}} =0</script><p>等价于（对数函数单增，两式极值点一致）</p>
+<script type="math/tex; mode=display">
+\frac{\partial lnp(z/x)}{\partial x}\mid_{x=\hat{x}_{ML}} =0</script><p>（1）极大似然函数估计需要已知观测值的概率密度函数即通过已知观测值与未知参数的条件分布来建立似然函数，而最小二乘估计只需要知道观测值与参数的函数关系和观测值的特征值；</p>
+<p>（2）极大似然估计并不考虑参数的先验分布，也就是说极大似然估计中，将$X$视为随机变量；</p>
+<p>（3）极大似然估计并不是线性估计但当观测值服从正态分布并且观测值与参数之间是线性关系时，极大似然估计与最小二乘估计等价；</p>
+<h2 id="极大验后估计"><a href="#极大验后估计" class="headerlink" title="极大验后估计"></a>极大验后估计</h2><p>极大似然估计是以”$L(x)=p(z/\hat{x})=max$“为估计准则，在其估计中并没有考虑参数$X$的先验信息。极大验后估计考虑到了$X$的先验信息是使验后条件概率密度函数$p(x\mid z)$最大的$\hat{x}$为参数的估计，即</p>
+<script type="math/tex; mode=display">
+p(x\mid z)=max</script><p>它的含义是，给定一组观测值$Z$，在这组观测值的条件下使得$x$出现的概率最大，故极大验后估计满足</p>
+<script type="math/tex; mode=display">
+\frac{\partial lnp(z\mid x)}{\partial x}\mid_{x=\hat{x}_{MAP}} =0</script><h2 id="最小（均）方差估计"><a href="#最小（均）方差估计" class="headerlink" title="最小（均）方差估计"></a>最小（均）方差估计</h2><p>1）均方差（MSE）反映的是估计值与其真值之间的密集程度或者估计值的真误差在零附近的密集程度，这里的方差估计是无偏估计，均方差就是方差，故称为最小方差估计。最小方差估计的准则为</p>
+<script type="math/tex; mode=display">
+J_0(\hat{X}(Z))=E[(\hat{X}-X)(\hat{X}-X)^T]=min</script><p>式中，$\hat{X}$是通过观测值$Z$得到的对$X$的估计，它是$Z$的函数，所以$(\hat{X}-X)(\hat{X}-X)^T$是$X$和$Z$的函数，假设$f(x,z)$为$X$和$Z$的联合分布，那么</p>
+<script type="math/tex; mode=display">
+J_0(\hat{X})=\iint(\hat{x}-x)(\hat{x}-x)^Tf(x,z)dxdz</script><p>$\because$    $f(z)\geq0$恒成立，故上式等价于</p>
+<script type="math/tex; mode=display">
+J_0(\hat{X})=\int(\hat{x}-x)(\hat{x}-x)^Tf(x,z)dx=min</script><p>解得</p>
+<script type="math/tex; mode=display">
+E(X/Z)-\hat{x}=0</script><p>即最小方差准则下的参数估计为</p>
+<script type="math/tex; mode=display">
+\hat{X}_{MV}=E(X/Z)</script><p>若把最小方差估计的准则改为使$J_0(\hat{X}(Z))$的迹最小，即</p>
+<script type="math/tex; mode=display">
+tr(J_0(\hat{X}(Z)))=E[(\hat{X}-X)(\hat{X}-X)^T]=min</script><p>即</p>
+<script type="math/tex; mode=display">
+tr(J_0(\hat{X}(Z)))=\int(\hat{x}-x)(\hat{x}-x)^Tf(x,z)dx\\=\hat{x}^T\hat{x}+\int x^Txf(x/z)dx-2\hat{x}^T\int xf(x/z)dx=min</script><p>上式对$\hat{x}$求导并零其为零得到</p>
+<script type="math/tex; mode=display">
+2\hat{x}-2\int xf(x/z)=0</script><p>因为$\int xf(x/z)dx=E(X/Z)$，所以方差的迹最小的解为</p>
+<script type="math/tex; mode=display">
+\hat{X}_{MV}=E(X/Z)</script><p>即方差迹最小的解与方差最小的解结果完全相同，所以可以用方差迹最小的准则来代替方差最小准则来得到方差最小的解。</p>
+<p>对于任何分布而言，参数$X$的最小方差估计$\hat{X}_{MV}$都为其验后期望，在正态分布的情况下，极大验后估计也为$E(X/Z)$，即极大验后估计与最小方差估计等价。</p>
+<p>2）线性最小方差估计</p>
+<p>线性最小方差估计是一种特殊的最小方差估计，它是指估计值$\hat{X}$是观测量$Z$的线性函数，并使得估计的均方差最小的估计，即估计量具有如下形式</p>
+<script type="math/tex; mode=display">
+\mathop{\hat{X}}\limits_{n×1}=\mathop{a_L}\limits_{n×1}+\mathop{B_L}\limits_{n×l}\mathop{Z}\limits_{l×1}</script><p>同时估计量</p>
+<script type="math/tex; mode=display">
+\hat{X}=MSE(\hat{X})=E[(X-\hat{X})(X-\hat{X})^T]=min</script><p>由上面对最小方差估计得推导得$J_0(\hat{X})=min$等价于</p>
+<script type="math/tex; mode=display">
+tr(J_0(\hat{X}))=E[(X-a_L-B_LZ)^T(X-a_L-B_LZ)]=min</script><p>根据极值理论将$tr(J_0(\hat{X}))$对$a_L$和$B_L$分别求偏导并令其为零</p>
+<script type="math/tex; mode=display">
+E(X-a_L-B_LZ)=0\\E((X-a_L-B_LZ)^TZ)=0</script><p>上两式联立解得</p>
+<script type="math/tex; mode=display">
+\begin{cases}a_L=E(X)-D_{XZ}D_Z^{-1}E(Z)\\B_L=D_{XZ}D_Z^{-1}\end{cases}</script><p>$a_L$和$B_L$表示满足线性最小方差的解，最后将解代入估计式得到最小方差估计</p>
+<script type="math/tex; mode=display">
+\hat{X}_L=a_L+B_LZ=E(X)+D_{XZ}D_Z^{-1}(Z-E(Z))</script><p>线性最小方差估计与最小二乘估计一样并不需要知道随机变量具体分布，但线性最小方差估计利用了参数$X$的先验随机信息$\mu_x$（期望）和$D_x$（方差），也就是说当有参数$X$的先验随机信息时，线性最小方差估计改进了最小二乘估计。</p>
+<h2 id="贝叶斯估计"><a href="#贝叶斯估计" class="headerlink" title="贝叶斯估计"></a>贝叶斯估计</h2><p>在估计某个量时，随机误差的干扰使估计产生误差</p>
+<script type="math/tex; mode=display">
+\nabla X=X-\hat{X}(Z)</script><p>这种差异造成的损失可以用损失函数来描述，即损失函数为</p>
+<script type="math/tex; mode=display">
+L(\nabla X)=L(X,\hat{X}(Z))</script><p>如何来量化着这种损失有不同的定义，一般而言，估计误差越大，损失就越大，典型的损失函数有：</p>
+<p>平方损失函数</p>
+<script type="math/tex; mode=display">
+L(X,\hat{X}(Z))=(X-\hat{X})(X-\hat{X})^T</script><p>绝对值损失函数</p>
+<script type="math/tex; mode=display">
+L(X,\hat{X}(Z))=\mid X-\hat{X}(Z)\mid</script><p>均值损失函数</p>
+<script type="math/tex; mode=display">
+L(X,\hat{X}(Z))=\begin{cases}0 \quad (\mid\nabla X\mid\leq\frac{\nabla}{2})\\ 1 \quad (\mid\nabla X\mid＞\frac{\nabla}{2})\end{cases}</script><p>损失函数在随机变量的整个域内的平均值，即期望，定义为贝叶斯风险</p>
+<script type="math/tex; mode=display">
+R_B(X,\hat{X}(Z))=\int_{-∞}^{+∞}\int_{-∞}^{+∞}L(X,\hat{X}(Z))f(x,z)dxdz</script><p>贝叶斯估计就是得到使上述的风险值最小的估计</p>
+<script type="math/tex; mode=display">
+\hat{X}_B(Z)=argmin(R_B(X,\hat{X}(Z)))</script><p>即</p>
+<script type="math/tex; mode=display">
+R_B(X,\hat{X}(Z))=min</script><p>下面根据不同的损失函数来推导贝叶斯估计</p>
+<p>1）平方损失函数</p>
+<p>平方损失函数的贝叶斯风险</p>
+<script type="math/tex; mode=display">
+R_B(X,\hat{X}(Z))=\int_{-∞}^{+∞}\int_{-∞}^{+∞}(X-\hat{X})(X-\hat{X})^Tf(x,z)dxdz</script><p>将上式与</p>
+<script type="math/tex; mode=display">
+J_0(\hat{X})=\iint(\hat{x}-x)(\hat{x}-x)^Tf(x,z)dxdz</script><p>比较可知平方损失函数的贝叶斯风险就是其均方差，所以贝叶斯风险最小的参数估计</p>
+<script type="math/tex; mode=display">
+\hat{X}_B(Z)=\hat{X}_{MV}=E(X/Z)</script><p>2)绝对损失函数</p>
+<p>绝对损失函数的验后风险为</p>
+<script type="math/tex; mode=display">
+r_{abs}(\hat{X}(Z)/Z)=\int_{-∞}^{+∞}\mid x-\hat{x}(z) \mid f(x/z)dx\\=\int_{-∞}^{\hat{x}(z)}(\hat{x}(z)-x )f(x/z)dx+\int_{\hat{x}(z)}^{+∞}( \hat{x}(z)-x) f(x/z)dx=min</script><p>对上式求导，并令导数在$\hat{X}(z)=\hat{X}_{abs}(z)$处为零，得</p>
+<script type="math/tex; mode=display">
+\int_{-∞}^{\hat{x}_{abs}(z)}f(x/z)dx=\int_{\hat{x}_{abs}(z)}^{+∞}f(x/z)dx</script><p>由上式可知，贝叶斯估计为条件概率密度$f_{X/Z(x/z)}$得中位数，即$\hat{X}_{abs}(z)=\hat{X}_{med}$，所以也称为条件中位数估计，记为$\hat{X}_{med}$。</p>
+<p>3）均匀损失价函数</p>
+<p>均匀损失价函数验后风险为</p>
+<script type="math/tex; mode=display">
+r_{unf}(\hat{X}(Z)/Z)=\int_{-∞}^{\hat{X}(Z)-\frac{\Delta}{2}} f(x/z)dx+\int_{\hat{X}(Z)+\frac{\Delta}{2}}^{+∞} f(x/z)dx =1-\int_{\hat{X}(Z)-\frac{\Delta}{2}}^{\hat{X}(Z)+\frac{\Delta}{2}} f(x/z)dx=min</script><p>上式等价于</p>
+<script type="math/tex; mode=display">
+f_{X/Z}(x/z) \mid_{x=\hat{x}}=max</script><p>即贝叶斯估计为极大验后估计$\hat{X}_{MAP}$，由于$f_{X/Z}(x/z)$不容易得到，由条件概率公式可知上式也等价于</p>
+<script type="math/tex; mode=display">
+f_{Z/X}(z/x) ×f_x(x)\mid_{x=\hat{x}_{MAP}}=max</script><h2 id="各个估计方法的总结对比"><a href="#各个估计方法的总结对比" class="headerlink" title="各个估计方法的总结对比"></a>各个估计方法的总结对比</h2><p>（1）最小二乘估计不需要知道随机变量得具体分布，只需要已知观测值与参数得关系和观测值得方差，将估计参数$X$视为非随机变量，其估计是线性估计。</p>
+<p>（2）极大似然估计需要知道参数条件下的观测值的具体分布$p(z/x)$，在其估计中并没有考虑$X$的先验分布，即视$X$为非随机变量。当观测值与参数呈线性关系并且正态分布时，极大似然估计与最小二乘估计等价。</p>
+<p>（3）极大验后估计需要已知$p(z \mid x)$和$p(x)$。与极大似然估计比较，极大验后估计用了$X$的先验分布$p(x)$，所以改进了极大似然估计。当$p(z,x)$服从正态分布时，其估计值为$E(X/Z)$，这与最小方差估计等价。</p>
+<p>（4）最小方差估计需要已知分布$p(x\mid z)$或者$E(X/Z)$，其估计值为$E(X/Z)$，与极大验后估计一样，最小方差估计利用了$X$的先验随机信息。</p>
+<p>（5）线性最小方差估计需要在最小方差的准则上满足其估计与观测值呈线性关系。线性最小方差估计对已知条件要求较为宽松，只需要知道观测值$Z$和参数$X$的期望、方差、协方差。</p>
+<p>（6）贝叶斯估计使估计误差造成的损失在整个验后分布的平均值最小，即损失函数的验后期望最小。不同的损失函数得到不同的估计，如当损失函数为平方损失函数时，其估计与最小方差估计等价；当损失函数为均匀损失函数时，其估计与最大验后估计等价。</p>
+<p>（7）最小二乘估计和线性最小方差估计为线性估计，其它方法只有在观测值与参数呈线性关系，并且是正态分布时才是线性估计。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1/" rel="tag"># 最优估计</a>
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/11/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%BA%8C/" rel="next" title="最优估计学习备忘二">
+      最优估计学习备忘二 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础理论篇"><span class="nav-number">1.</span> <span class="nav-text">基础理论篇</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#最小二乘估计"><span class="nav-number">1.1.</span> <span class="nav-text">最小二乘估计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#极大似然估计"><span class="nav-number">1.2.</span> <span class="nav-text">极大似然估计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#极大验后估计"><span class="nav-number">1.3.</span> <span class="nav-text">极大验后估计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小（均）方差估计"><span class="nav-number">1.4.</span> <span class="nav-text">最小（均）方差估计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#贝叶斯估计"><span class="nav-number">1.5.</span> <span class="nav-text">贝叶斯估计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各个估计方法的总结对比"><span class="nav-number">1.6.</span> <span class="nav-text">各个估计方法的总结对比</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Li"
+      src="/images/banya.jpg">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yuanxingsgg" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yuanxingsgg" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/yourname" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/yourname" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='100,100,100' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'xuRbm6Iujvd7QpCRvjizMs91-MdYXbMMI',
+      appKey     : 'SdRc64sleBzyHlfYTwnKbYPm',
+      placeholder: "说点什么吧~",
+      avatar     : 'wavatar',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

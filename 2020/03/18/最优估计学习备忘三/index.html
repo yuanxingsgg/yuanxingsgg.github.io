@@ -20,15 +20,21 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Li&#39;s World">
-<meta property="og:url" content="http://yoursite.com/archives/2020/03/index.html">
+  <meta name="description" content="最优估计实践（线性卡尔曼滤波）概述线性离散系统的卡尔曼滤波基于最小方差准则的推导1）推导过程 2）基本递推公式和直观解释 3）观测值逐次更新法 观测值相互独立 观测值相互关联 4）应用 滤波器稳定性判别1）稳定性 2）判别法 线性离散系统的最优预测与平滑1）最优预测 2）最优平滑 固定区间平滑 固定滞后平滑 固定点平滑 线性连续系统的卡尔曼滤波1）推导 2）应用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最优估计学习备忘三">
+<meta property="og:url" content="http://yoursite.com/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%89/index.html">
 <meta property="og:site_name" content="Li&#39;s World">
+<meta property="og:description" content="最优估计实践（线性卡尔曼滤波）概述线性离散系统的卡尔曼滤波基于最小方差准则的推导1）推导过程 2）基本递推公式和直观解释 3）观测值逐次更新法 观测值相互独立 观测值相互关联 4）应用 滤波器稳定性判别1）稳定性 2）判别法 线性离散系统的最优预测与平滑1）最优预测 2）最优平滑 固定区间平滑 固定滞后平滑 固定点平滑 线性连续系统的卡尔曼滤波1）推导 2）应用">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-18T06:24:16.000Z">
+<meta property="article:modified_time" content="2020-03-18T06:43:07.630Z">
 <meta property="article:author" content="Li">
+<meta property="article:tag" content="最优估计">
+<meta property="article:tag" content="笔记">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/archives/2020/03/">
+<link rel="canonical" href="http://yoursite.com/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%89/">
 
 
 <script id="page-configurations">
@@ -36,11 +42,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false
+    isPost : true
   };
 </script>
 
-  <title>归档 | Li's World</title>
+  <title>最优估计学习备忘三 | Li's World</title>
   
 
 
@@ -186,113 +192,131 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/banya.jpg">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Li's World">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最优估计学习备忘三
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-18 14:24:16 / 修改时间：14:43:07" itemprop="dateCreated datePublished" datetime="2020-03-18T14:24:16+08:00">2020-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">最优估计</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%89/" class="post-meta-item leancloud_visitors" data-flag-title="最优估计学习备忘三" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
   
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 4 篇日志。 继续努力。</span>
-      </div>
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">评论数：</span>
+    
+    <a title="valine" href="/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%89/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%89/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2020</h1>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-03-18T14:24:16+08:00"
-              content="2020-03-18">
-          03-18
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%89/" itemprop="url">
-            <span itemprop="name">最优估计学习备忘三</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-03-18T11:56:37+08:00"
-              content="2020-03-18">
-          03-18
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%BA%8C/" itemprop="url">
-            <span itemprop="name">最优估计学习备忘二</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-03-12T15:03:51+08:00"
-              content="2020-03-12">
-          03-12
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/03/12/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%80/" itemprop="url">
-            <span itemprop="name">最优估计学习备忘一</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-03-11T19:34:29+08:00"
-              content="2020-03-11">
-          03-11
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/03/11/hello-world/" itemprop="url">
-            <span itemprop="name">Hello World</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
+        <h1 id="最优估计实践（线性卡尔曼滤波）"><a href="#最优估计实践（线性卡尔曼滤波）" class="headerlink" title="最优估计实践（线性卡尔曼滤波）"></a>最优估计实践（线性卡尔曼滤波）</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h2 id="线性离散系统的卡尔曼滤波"><a href="#线性离散系统的卡尔曼滤波" class="headerlink" title="线性离散系统的卡尔曼滤波"></a>线性离散系统的卡尔曼滤波</h2><h3 id="基于最小方差准则的推导"><a href="#基于最小方差准则的推导" class="headerlink" title="基于最小方差准则的推导"></a>基于最小方差准则的推导</h3><p>1）推导过程</p>
+<p>2）基本递推公式和直观解释</p>
+<p>3）观测值逐次更新法</p>
+<p>观测值相互独立</p>
+<p>观测值相互关联</p>
+<p>4）应用</p>
+<h3 id="滤波器稳定性判别"><a href="#滤波器稳定性判别" class="headerlink" title="滤波器稳定性判别"></a>滤波器稳定性判别</h3><p>1）稳定性</p>
+<p>2）判别法</p>
+<h3 id="线性离散系统的最优预测与平滑"><a href="#线性离散系统的最优预测与平滑" class="headerlink" title="线性离散系统的最优预测与平滑"></a>线性离散系统的最优预测与平滑</h3><p>1）最优预测</p>
+<p>2）最优平滑</p>
+<p>固定区间平滑</p>
+<p>固定滞后平滑</p>
+<p>固定点平滑</p>
+<h2 id="线性连续系统的卡尔曼滤波"><a href="#线性连续系统的卡尔曼滤波" class="headerlink" title="线性连续系统的卡尔曼滤波"></a>线性连续系统的卡尔曼滤波</h2><p>1）推导</p>
+<p>2）应用</p>
 
     </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1/" rel="tag"># 最优估计</a>
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%BA%8C/" rel="prev" title="最优估计学习备忘二">
+      <i class="fa fa-chevron-left"></i> 最优估计学习备忘二
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -339,6 +363,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#最优估计实践（线性卡尔曼滤波）"><span class="nav-number">1.</span> <span class="nav-text">最优估计实践（线性卡尔曼滤波）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性离散系统的卡尔曼滤波"><span class="nav-number">1.2.</span> <span class="nav-text">线性离散系统的卡尔曼滤波</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于最小方差准则的推导"><span class="nav-number">1.2.1.</span> <span class="nav-text">基于最小方差准则的推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#滤波器稳定性判别"><span class="nav-number">1.2.2.</span> <span class="nav-text">滤波器稳定性判别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线性离散系统的最优预测与平滑"><span class="nav-number">1.2.3.</span> <span class="nav-text">线性离散系统的最优预测与平滑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性连续系统的卡尔曼滤波"><span class="nav-number">1.3.</span> <span class="nav-text">线性连续系统的卡尔曼滤波</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -470,6 +495,59 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

@@ -24,11 +24,11 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="最优估计学习备忘三">
 <meta property="og:url" content="http://yoursite.com/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%89/index.html">
-<meta property="og:site_name" content="Li&#39;s World">
+<meta property="og:site_name" content="Li&#39;s Lab">
 <meta property="og:description" content="最优估计实践（线性卡尔曼滤波）卡尔曼滤波采用状态空间来描述系统，在经典估计理论中加入了状态方程，通过对被提取信号有关的量测来估计所需要的信号（状态变量）。在估计中利用的信息有：状态方程、观测方程、系统噪声、量测噪声和初始状态的统计特性，即已知系统和量测的数学模型，实时获得系统状态变量的最优估计。由于状态可以是多维，卡尔曼滤波的维数不再局限于一维，而且卡尔曼滤波算法采用递推形式，所以也可以处理非平稳">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-18T06:24:16.000Z">
-<meta property="article:modified_time" content="2020-03-19T07:40:59.606Z">
+<meta property="article:modified_time" content="2020-03-19T07:54:25.397Z">
 <meta property="article:author" content="Li">
 <meta property="article:tag" content="最优估计">
 <meta property="article:tag" content="笔记">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>最优估计学习备忘三 | Li's World</title>
+  <title>最优估计学习备忘三 | Li's Lab</title>
   
 
 
@@ -98,7 +98,7 @@
     <div>
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Li's World</span>
+        <span class="site-title">Li's Lab</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -206,7 +206,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Li's World">
+      <meta itemprop="name" content="Li's Lab">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -227,7 +227,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-19 15:40:59" itemprop="dateModified" datetime="2020-03-19T15:40:59+08:00">2020-03-19</time>
+                <time title="修改时间：2020-03-19 15:54:25" itemprop="dateModified" datetime="2020-03-19T15:54:25+08:00">2020-03-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -286,19 +286,19 @@ E(X(0))=\hat{X}(0)=\mu_x(0),var(X(0))=D_{\hat{X}}(0)\\cov[X(0),e(k)]=0,cov[X(0),
 <script type="math/tex; mode=display">
 X(k)=\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1)</script><p>状态方程建立了$X(k)$与$X(k-1)$的关系，因此我们可以在得到观测值$Z(k)$前就得到$X(k)$的一些先验信息。由最小方差估计可以根据$k-1$个量测$Z(1),Z(2),\cdots,Z(k-1)$对$X(k)$做最小方差估计，记为$\hat{X}(k,k-1)$</p>
 <script type="math/tex; mode=display">
-\hat{X}(k,k-1)=E[X(k)/Z(1)Z(2)\cdots Z(k-1)]\\=E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]</script><p>上式的条件期望也可表示为</p>
+\hat{X}(k,k-1)=E[X(k)/Z(1)Z(2)\cdots Z(k-1)] \\=E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]</script><p>上式的条件期望也可表示为</p>
 <script type="math/tex; mode=display">
-E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]\\=\iint(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))f([x(k-1),e(k-1)/z(1)z(2)\cdots \\z(k-1))dx(k-1)de(k-1)])</script><p>因为知道$e(k-1)$只影响$X(k)$，所以$e(k-1)$与$X(k-1)$以及$Z(1),Z(2),\cdots,Z(k-1)$都不相关，所以</p>
+E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)] \\=\iint(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))f([x(k-1),e(k-1)/z(1)z(2)\cdots  \\z(k-1))dx(k-1)de(k-1)])</script><p>因为知道$e(k-1)$只影响$X(k)$，所以$e(k-1)$与$X(k-1)$以及$Z(1),Z(2),\cdots,Z(k-1)$都不相关，所以</p>
 <script type="math/tex; mode=display">
-f([x(k-1),e(k-1)]/z(1)z(2)\cdots z(k-1))\\=f(e(k-1))f(x(k-1))/z(1)z(2)\cdots z(k-1))</script><p>此式代入上一式可得</p>
+f([x(k-1),e(k-1)]/z(1)z(2)\cdots z(k-1)) \\=f(e(k-1))f(x(k-1))/z(1)z(2)\cdots z(k-1))</script><p>此式代入上一式可得</p>
 <script type="math/tex; mode=display">
-E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]\\=\Phi_{k,k-1}E(X(k-1)/Z(1)Z(2)\cdots Z(k-1))</script><p>所以$\hat{X}(k,k-1)$为（$E(e(k-1)=0)$）</p>
+E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)] \\=\Phi_{k,k-1}E(X(k-1)/Z(1)Z(2)\cdots Z(k-1))</script><p>所以$\hat{X}(k,k-1)$为（$E(e(k-1)=0)$）</p>
 <script type="math/tex; mode=display">
 \hat{X}(k,k-1)=\Phi_{k,k-1}E(X(k-1))/Z(1)Z(2)\cdots Z(k-1)</script><p>由最小方差估计知道，上式中的$E(X(k-1)/Z(1)Z(2)\cdots Z(k-1))$是对$X(k-1)$的最小方差估计，即为$\hat{X}(k-1)$，即有</p>
 <script type="math/tex; mode=display">
 \hat{X}(k,k-1)=\Phi_{k,k-1}\hat{X}(k-1)</script><p>上式表明$Z(1)Z(2)\cdots Z(k-1)$对$X(k)$的最小方差估计$\hat{X}(k,k-1)$为状态转移矩阵$\Phi_{k,k-1}$乘以最小方差估计$\hat{X}(k-1)$。$\hat{X}(k,k-1)$为未有观测值$Z(k)$前对$X(k)$的预测，称为$X(k)$的一步预测，其预测误差为</p>
 <script type="math/tex; mode=display">
-\Delta\hat{X}(k,k-1)=X(k)-\hat{X}(k,k-1)\\=\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1)-\Phi_{k,k-1}\hat{X}(k-1)\\=\Phi_{k,k-1} \Delta\hat{X}(k-1)+\Gamma_{k,k-1}e(k-1)</script><p>其中</p>
+\Delta\hat{X}(k,k-1)=X(k)-\hat{X}(k,k-1) \\=\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1)-\Phi_{k,k-1}\hat{X}(k-1) \\=\Phi_{k,k-1} \Delta\hat{X}(k-1)+\Gamma_{k,k-1}e(k-1)</script><p>其中</p>
 <script type="math/tex; mode=display">
 \Delta\hat{X}(k-1)=X(k-1)-\hat{X}(k-1)</script><p>$\Delta\hat{X}(k,k-1)$的期望为</p>
 <script type="math/tex; mode=display">
@@ -312,7 +312,7 @@ E(\hat{X}(k,k-1))=E(X(k))</script><p>即证明得到 $\hat{X}(k,k-1)$ 是$X(k)$�
 <script type="math/tex; mode=display">
 \hat{Z}(k,k-1)=H_k\hat{X}(k,k-1)</script><p>预测值与实际观测值的差异为</p>
 <script type="math/tex; mode=display">
-V_z(k,k-1)=Z(k)-\hat{Z}(k,k-1)\\=H_kX(k)+\Delta(k)-H_k\hat{X}(k,k-1)\\=H_k\Delta\hat{X}(k,k-1)+\Delta(k)</script><p>$V_z(k,k-1)$在滤波理论中称为预测残差（也称新息）。从上式可以看出，预测残差包含一步预测误差和观测误差。$V_z(k,k-1)$的期望为</p>
+V_z(k,k-1)=Z(k)-\hat{Z}(k,k-1) \\=H_kX(k)+\Delta(k)-H_k\hat{X}(k,k-1) \\=H_k\Delta\hat{X}(k,k-1)+\Delta(k)</script><p>$V_z(k,k-1)$在滤波理论中称为预测残差（也称新息）。从上式可以看出，预测残差包含一步预测误差和观测误差。$V_z(k,k-1)$的期望为</p>
 <script type="math/tex; mode=display">
 E(V_z(k,k-1))=H_kE(\Delta\hat{X}(k,k-1))+E(\Delta(k))</script><p>因为$E(e(k-1))$为零，$\Delta\hat{X}(k,k-1)$的期望也为零，所以</p>
 <script type="math/tex; mode=display">
@@ -322,7 +322,7 @@ V_z(k,k-1)=H_k\Delta\hat{X}(k,k-1)+\Delta(k)</script><p>就是将$\Delta\hat{X}(
 <script type="math/tex; mode=display">
 E[\Delta(k)]=0,cov[\Delta(k)]=D_\Delta(k)\\E(\Delta\hat{X}(k,k-1))=0,cov(\Delta\hat{X}(k,k-1))=D_{\hat{X}(k,k-1)}</script><p>根据线性最小方差估计理论可以直接得到$\Delta\hat{X}(k,k-1)$的线性最小方差估计，记为$\Delta\hat{\hat{X}}(k,k-1)$，其值为</p>
 <script type="math/tex; mode=display">
-\Delta\hat{\hat{X}}(k,k-1)=E(\Delta\hat{X}(k,k-1))\\+D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}(V_z(k,k-1)-H_kE(\Delta\hat{X}(k,k-1)))</script><p>由于</p>
+\Delta\hat{\hat{X}}(k,k-1)=E(\Delta\hat{X}(k,k-1)) \\+D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}(V_z(k,k-1)-H_kE(\Delta\hat{X}(k,k-1)))</script><p>由于</p>
 <script type="math/tex; mode=display">
 E(\Delta\hat{X}(k,k-1))=0</script><p>有</p>
 <script type="math/tex; mode=display">
@@ -330,7 +330,7 @@ E(\Delta\hat{X}(k,k-1))=0</script><p>有</p>
 <script type="math/tex; mode=display">
 X(k)=\Delta\hat{X}(k,k-1)+\hat{X}(k,k-1)</script><p>所以用$\Delta\hat{X}(k-1)$的线性最小方差估计值$\Delta\hat{\hat{X}}(k,k-1)$替代上式中的$\Delta\hat{X}(k-1)$可以得到由$V_z(k,k-1)$对$X(k)$的估计$\hat{X}(k)$ </p>
 <script type="math/tex; mode=display">
-\hat{X}(k)=\Delta\hat{X}(k,k-1)+\hat{X}(k,k-1)\\=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}V_z(k,k-1)+\hat{X}(k,k-1)</script><p>由于$V_z(k,k-1)$是由观测值$z(k)$得到，具有观测值的信息，所以上式即为观测值对$\hat{X}(k,k-1)$ 的更新，记</p>
+\hat{X}(k)=\Delta\hat{X}(k,k-1)+\hat{X}(k,k-1) \\=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}V_z(k,k-1)+\hat{X}(k,k-1)</script><p>由于$V_z(k,k-1)$是由观测值$z(k)$得到，具有观测值的信息，所以上式即为观测值对$\hat{X}(k,k-1)$ 的更新，记</p>
 <script type="math/tex; mode=display">
 K_k=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}</script><p>有</p>
 <script type="math/tex; mode=display">
@@ -374,7 +374,10 @@ E(\hat{X}(k))=K_kE(V_z(k,k-1))+E(\hat{X}(k,k-1))=E(\hat{X}(k,k-1))=E(X(k))</scri
     <a href="/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%BA%8C/" rel="prev" title="最优估计学习备忘二">
       <i class="fa fa-chevron-left"></i> 最优估计学习备忘二
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/19/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E5%9B%9B/" rel="next" title="最优估计学习备忘四">
+      最优估计学习备忘四 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -451,20 +454,20 @@ E(\hat{X}(k))=K_kE(V_z(k,k-1))+E(\hat{X}(k,k-1))=E(\hat{X}(k,k-1))=E(X(k))</scri
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

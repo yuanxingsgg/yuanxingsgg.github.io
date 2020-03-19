@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>留言板</title>
+    <url>/2020/03/19/%E7%95%99%E8%A8%80%E6%9D%BF/</url>
+    <content><![CDATA[<p>这是一个留言版<br><a id="more"></a><br><img src="/2020/03/19/%E7%95%99%E8%A8%80%E6%9D%BF/2.jpg" alt="logo"><br><img src="/2020/03/19/%E7%95%99%E8%A8%80%E6%9D%BF/1.jpg" alt="logo"></p>
+]]></content>
+      <categories>
+        <category>留言版</category>
+      </categories>
+      <tags>
+        <tag>留言板</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>最优估计学习备忘四</title>
+    <url>/2020/03/19/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E5%9B%9B/</url>
+    <content><![CDATA[<h1 id="线性卡尔曼滤波的实施"><a href="#线性卡尔曼滤波的实施" class="headerlink" title="线性卡尔曼滤波的实施"></a>线性卡尔曼滤波的实施</h1><p>在理想的情况下，如果数学模型与物理现实一致，卡尔曼滤波得到的是无偏线性最小方差估计，而且随着测量数据的增加，卡尔曼滤波估计逐渐趋近状态的期望，误差方差逐渐趋于稳态值。但在实际应用中卡尔曼滤波会出现各种问题，最常见的是滤波估计值偏离实际的状态值，如果随着时间的推移这种偏离越来越大甚至趋于无穷大，就称滤波发生了发散。同时一般在滤波估计发生偏移和发散时，滤波估计的方差也发生偏移和发散。</p>
+<p>滤波发散的原因有三个，一是模型发散，即系统的数学模型不是一致完全可控和一致完全可测的，滤波不具有一致渐进稳定性，抑制模型发散的基本方法是改变系统的结构及参数，使系统在随机作用下有一致完全可控可测；二是数值发散，由于计算机的字长是有限的，这就使得滤波递推中的每一步计算都有截断误差，这使得误差方差逐渐失去正定性甚至对称性，滤波增益的计算值与理论值的差异越来越大，从而导致发散，抑制数值发散的最基本方法是采用双字长运算，这样可以有效减少数字的损失，对于滤波问题，抑制数值发散还可以在滤波过程中将方差阵分解（使用平方根滤波、$UDU^T$分解滤波），通过分解后的矩阵代替原来的方差矩阵进行递推，此外当滤波的方差很大甚至无穷大时，将导致滤波无法计算，这时可将方差的逆矩阵来代替原方差进行滤波递推（信息滤波）；三是由于对物理现实认识不足，对实际系统的过程缺乏完整的了解或足够的统计数据，是建立了不准确的数学模型，针对此类问题，可使用有色噪声下卡尔曼滤波（将有色噪声转化为白噪声）、扩展的卡尔曼滤波（一定程度上减小方程线性化带来的模型误差）、自适应的卡尔曼滤波（实时地调整和修正系统模型和噪声地方差矩阵，以达到模型地自适应地与现实相吻合）来解决对应的问题。</p>
+<h2 id="平方根滤波"><a href="#平方根滤波" class="headerlink" title="平方根滤波"></a>平方根滤波</h2>]]></content>
+  </entry>
+  <entry>
     <title>最优估计学习备忘三</title>
     <url>/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%B8%89/</url>
     <content><![CDATA[<h1 id="最优估计实践（线性卡尔曼滤波）"><a href="#最优估计实践（线性卡尔曼滤波）" class="headerlink" title="最优估计实践（线性卡尔曼滤波）"></a>最优估计实践（线性卡尔曼滤波）</h1><p>卡尔曼滤波采用状态空间来描述系统，在经典估计理论中加入了状态方程，通过对被提取信号有关的量测来估计所需要的信号（状态变量）。在估计中利用的信息有：状态方程、观测方程、系统噪声、量测噪声和初始状态的统计特性，即已知系统和量测的数学模型，实时获得系统状态变量的最优估计。由于状态可以是多维，卡尔曼滤波的维数不再局限于一维，而且卡尔曼滤波算法采用递推形式，所以也可以处理非平稳的随机过程。卡尔曼滤波是一种线性，无偏且方差最小的最优估计方法。对于计算机运算来说，卡尔曼滤波的递推使其运算量和存储量大为减少，容易满足实时估计的要求。<br><a id="more"></a></p>
@@ -18,19 +37,19 @@ E(X(0))=\hat{X}(0)=\mu_x(0),var(X(0))=D_{\hat{X}}(0)\\cov[X(0),e(k)]=0,cov[X(0),
 <script type="math/tex; mode=display">
 X(k)=\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1)</script><p>状态方程建立了$X(k)$与$X(k-1)$的关系，因此我们可以在得到观测值$Z(k)$前就得到$X(k)$的一些先验信息。由最小方差估计可以根据$k-1$个量测$Z(1),Z(2),\cdots,Z(k-1)$对$X(k)$做最小方差估计，记为$\hat{X}(k,k-1)$</p>
 <script type="math/tex; mode=display">
-\hat{X}(k,k-1)=E[X(k)/Z(1)Z(2)\cdots Z(k-1)]\\=E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]</script><p>上式的条件期望也可表示为</p>
+\hat{X}(k,k-1)=E[X(k)/Z(1)Z(2)\cdots Z(k-1)] \\=E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]</script><p>上式的条件期望也可表示为</p>
 <script type="math/tex; mode=display">
-E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]\\=\iint(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))f([x(k-1),e(k-1)/z(1)z(2)\cdots \\z(k-1))dx(k-1)de(k-1)])</script><p>因为知道$e(k-1)$只影响$X(k)$，所以$e(k-1)$与$X(k-1)$以及$Z(1),Z(2),\cdots,Z(k-1)$都不相关，所以</p>
+E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)] \\=\iint(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))f([x(k-1),e(k-1)/z(1)z(2)\cdots  \\z(k-1))dx(k-1)de(k-1)])</script><p>因为知道$e(k-1)$只影响$X(k)$，所以$e(k-1)$与$X(k-1)$以及$Z(1),Z(2),\cdots,Z(k-1)$都不相关，所以</p>
 <script type="math/tex; mode=display">
-f([x(k-1),e(k-1)]/z(1)z(2)\cdots z(k-1))\\=f(e(k-1))f(x(k-1))/z(1)z(2)\cdots z(k-1))</script><p>此式代入上一式可得</p>
+f([x(k-1),e(k-1)]/z(1)z(2)\cdots z(k-1)) \\=f(e(k-1))f(x(k-1))/z(1)z(2)\cdots z(k-1))</script><p>此式代入上一式可得</p>
 <script type="math/tex; mode=display">
-E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]\\=\Phi_{k,k-1}E(X(k-1)/Z(1)Z(2)\cdots Z(k-1))</script><p>所以$\hat{X}(k,k-1)$为（$E(e(k-1)=0)$）</p>
+E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)] \\=\Phi_{k,k-1}E(X(k-1)/Z(1)Z(2)\cdots Z(k-1))</script><p>所以$\hat{X}(k,k-1)$为（$E(e(k-1)=0)$）</p>
 <script type="math/tex; mode=display">
 \hat{X}(k,k-1)=\Phi_{k,k-1}E(X(k-1))/Z(1)Z(2)\cdots Z(k-1)</script><p>由最小方差估计知道，上式中的$E(X(k-1)/Z(1)Z(2)\cdots Z(k-1))$是对$X(k-1)$的最小方差估计，即为$\hat{X}(k-1)$，即有</p>
 <script type="math/tex; mode=display">
 \hat{X}(k,k-1)=\Phi_{k,k-1}\hat{X}(k-1)</script><p>上式表明$Z(1)Z(2)\cdots Z(k-1)$对$X(k)$的最小方差估计$\hat{X}(k,k-1)$为状态转移矩阵$\Phi_{k,k-1}$乘以最小方差估计$\hat{X}(k-1)$。$\hat{X}(k,k-1)$为未有观测值$Z(k)$前对$X(k)$的预测，称为$X(k)$的一步预测，其预测误差为</p>
 <script type="math/tex; mode=display">
-\Delta\hat{X}(k,k-1)=X(k)-\hat{X}(k,k-1)\\=\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1)-\Phi_{k,k-1}\hat{X}(k-1)\\=\Phi_{k,k-1} \Delta\hat{X}(k-1)+\Gamma_{k,k-1}e(k-1)</script><p>其中</p>
+\Delta\hat{X}(k,k-1)=X(k)-\hat{X}(k,k-1) \\=\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1)-\Phi_{k,k-1}\hat{X}(k-1) \\=\Phi_{k,k-1} \Delta\hat{X}(k-1)+\Gamma_{k,k-1}e(k-1)</script><p>其中</p>
 <script type="math/tex; mode=display">
 \Delta\hat{X}(k-1)=X(k-1)-\hat{X}(k-1)</script><p>$\Delta\hat{X}(k,k-1)$的期望为</p>
 <script type="math/tex; mode=display">
@@ -44,7 +63,7 @@ E(\hat{X}(k,k-1))=E(X(k))</script><p>即证明得到 $\hat{X}(k,k-1)$ 是$X(k)$�
 <script type="math/tex; mode=display">
 \hat{Z}(k,k-1)=H_k\hat{X}(k,k-1)</script><p>预测值与实际观测值的差异为</p>
 <script type="math/tex; mode=display">
-V_z(k,k-1)=Z(k)-\hat{Z}(k,k-1)\\=H_kX(k)+\Delta(k)-H_k\hat{X}(k,k-1)\\=H_k\Delta\hat{X}(k,k-1)+\Delta(k)</script><p>$V_z(k,k-1)$在滤波理论中称为预测残差（也称新息）。从上式可以看出，预测残差包含一步预测误差和观测误差。$V_z(k,k-1)$的期望为</p>
+V_z(k,k-1)=Z(k)-\hat{Z}(k,k-1) \\=H_kX(k)+\Delta(k)-H_k\hat{X}(k,k-1) \\=H_k\Delta\hat{X}(k,k-1)+\Delta(k)</script><p>$V_z(k,k-1)$在滤波理论中称为预测残差（也称新息）。从上式可以看出，预测残差包含一步预测误差和观测误差。$V_z(k,k-1)$的期望为</p>
 <script type="math/tex; mode=display">
 E(V_z(k,k-1))=H_kE(\Delta\hat{X}(k,k-1))+E(\Delta(k))</script><p>因为$E(e(k-1))$为零，$\Delta\hat{X}(k,k-1)$的期望也为零，所以</p>
 <script type="math/tex; mode=display">
@@ -54,7 +73,7 @@ V_z(k,k-1)=H_k\Delta\hat{X}(k,k-1)+\Delta(k)</script><p>就是将$\Delta\hat{X}(
 <script type="math/tex; mode=display">
 E[\Delta(k)]=0,cov[\Delta(k)]=D_\Delta(k)\\E(\Delta\hat{X}(k,k-1))=0,cov(\Delta\hat{X}(k,k-1))=D_{\hat{X}(k,k-1)}</script><p>根据线性最小方差估计理论可以直接得到$\Delta\hat{X}(k,k-1)$的线性最小方差估计，记为$\Delta\hat{\hat{X}}(k,k-1)$，其值为</p>
 <script type="math/tex; mode=display">
-\Delta\hat{\hat{X}}(k,k-1)=E(\Delta\hat{X}(k,k-1))\\+D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}(V_z(k,k-1)-H_kE(\Delta\hat{X}(k,k-1)))</script><p>由于</p>
+\Delta\hat{\hat{X}}(k,k-1)=E(\Delta\hat{X}(k,k-1)) \\+D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}(V_z(k,k-1)-H_kE(\Delta\hat{X}(k,k-1)))</script><p>由于</p>
 <script type="math/tex; mode=display">
 E(\Delta\hat{X}(k,k-1))=0</script><p>有</p>
 <script type="math/tex; mode=display">
@@ -62,7 +81,7 @@ E(\Delta\hat{X}(k,k-1))=0</script><p>有</p>
 <script type="math/tex; mode=display">
 X(k)=\Delta\hat{X}(k,k-1)+\hat{X}(k,k-1)</script><p>所以用$\Delta\hat{X}(k-1)$的线性最小方差估计值$\Delta\hat{\hat{X}}(k,k-1)$替代上式中的$\Delta\hat{X}(k-1)$可以得到由$V_z(k,k-1)$对$X(k)$的估计$\hat{X}(k)$ </p>
 <script type="math/tex; mode=display">
-\hat{X}(k)=\Delta\hat{X}(k,k-1)+\hat{X}(k,k-1)\\=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}V_z(k,k-1)+\hat{X}(k,k-1)</script><p>由于$V_z(k,k-1)$是由观测值$z(k)$得到，具有观测值的信息，所以上式即为观测值对$\hat{X}(k,k-1)$ 的更新，记</p>
+\hat{X}(k)=\Delta\hat{X}(k,k-1)+\hat{X}(k,k-1) \\=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}V_z(k,k-1)+\hat{X}(k,k-1)</script><p>由于$V_z(k,k-1)$是由观测值$z(k)$得到，具有观测值的信息，所以上式即为观测值对$\hat{X}(k,k-1)$ 的更新，记</p>
 <script type="math/tex; mode=display">
 K_k=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}</script><p>有</p>
 <script type="math/tex; mode=display">
@@ -98,7 +117,7 @@ E(\hat{X}(k))=K_kE(V_z(k,k-1))+E(\hat{X}(k,k-1))=E(\hat{X}(k,k-1))=E(X(k))</scri
     <url>/2020/03/18/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E4%BA%8C/</url>
     <content><![CDATA[<h1 id="动态系统的数学模型及性质"><a href="#动态系统的数学模型及性质" class="headerlink" title="动态系统的数学模型及性质"></a>动态系统的数学模型及性质</h1><p>备忘一介绍了参数估计的数学模型，它描述观测值与参数之间的关系，是静态估计模型。静态估计模型不考虑研究对象的状态在时间上的变化，但生活中大量的研究对象是一个动态系统，在估计时我们必须考虑研究对象的运动变化规律，所以在对动态系统的估计中，除了观测方程以外，还需要对动态系统的物理变化规律或者动力学状态进行数学描述，即描述系统的“输入”与系统“状态”之间的关系，所以称为状态方程。为了研究系统的特性我们对系统进行观测，观测量即为系统的输出，所以观测方程描述了输出与状态之间的关系。状态方程和观测方程构成了动态系统的数学模型。</p>
 <a id="more"></a>
-<h2 id="状态方程及其对应的解"><a href="#状态方程及其对应的解" class="headerlink" title="状态方程及其对应的解"></a>状态方程及其对应的解</h2><p>设$X(t)为状态变量，$A(t)$、$B(t)$ 为系数矩阵，$$u(t)$ 为输入矩阵，$X(t_0)=X_0$为系统初值</p>
+<h2 id="状态方程及其对应的解"><a href="#状态方程及其对应的解" class="headerlink" title="状态方程及其对应的解"></a>状态方程及其对应的解</h2><p>设$X(t)$为状态变量，$A(t)$、$B(t)$ 为系数矩阵，$u(t)$ 为输入矩阵，$X(t_0)=X_0$为系统初值</p>
 <p>1)若$A(t)$不随时间变化，即为常数矩阵$A$，则有线性时不变齐次状态方程</p>
 <script type="math/tex; mode=display">
 \mathop{X}’(t)=\mathop{A}\mathop{X}(t)</script><p>根据常微分方程的解法并由初始条件可以得到</p>

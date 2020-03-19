@@ -214,10 +214,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-18 14:24:16 / 修改时间：14:43:07" itemprop="dateCreated datePublished" datetime="2020-03-18T14:24:16+08:00">2020-03-18</time>
+              <time title="创建时间：2020-03-18 14:24:16" itemprop="dateCreated datePublished" datetime="2020-03-18T14:24:16+08:00">2020-03-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-19 15:35:42" itemprop="dateModified" datetime="2020-03-19T15:35:42+08:00">2020-03-19</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -260,12 +266,78 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="最优估计实践（线性卡尔曼滤波）"><a href="#最优估计实践（线性卡尔曼滤波）" class="headerlink" title="最优估计实践（线性卡尔曼滤波）"></a>最优估计实践（线性卡尔曼滤波）</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h2 id="线性离散系统的卡尔曼滤波"><a href="#线性离散系统的卡尔曼滤波" class="headerlink" title="线性离散系统的卡尔曼滤波"></a>线性离散系统的卡尔曼滤波</h2><h3 id="基于最小方差准则的推导"><a href="#基于最小方差准则的推导" class="headerlink" title="基于最小方差准则的推导"></a>基于最小方差准则的推导</h3><p>1）推导过程</p>
-<p>2）基本递推公式和直观解释</p>
-<p>3）观测值逐次更新法</p>
+          <h1 id="最优估计实践（线性卡尔曼滤波）"><a href="#最优估计实践（线性卡尔曼滤波）" class="headerlink" title="最优估计实践（线性卡尔曼滤波）"></a>最优估计实践（线性卡尔曼滤波）</h1><p>卡尔曼滤波采用状态空间来描述系统，在经典估计理论中加入了状态方程，通过对被提取信号有关的量测来估计所需要的信号（状态变量）。在估计中利用的信息有：状态方程、观测方程、系统噪声、量测噪声和初始状态的统计特性，即已知系统和量测的数学模型，实时获得系统状态变量的最优估计。由于状态可以是多维，卡尔曼滤波的维数不再局限于一维，而且卡尔曼滤波算法采用递推形式，所以也可以处理非平稳的随机过程。卡尔曼滤波是一种线性，无偏且方差最小的最优估计方法。对于计算机运算来说，卡尔曼滤波的递推使其运算量和存储量大为减少，容易满足实时估计的要求。</p>
+<h2 id="线性离散系统的卡尔曼滤波"><a href="#线性离散系统的卡尔曼滤波" class="headerlink" title="线性离散系统的卡尔曼滤波"></a>线性离散系统的卡尔曼滤波</h2><p>离散线性系统的函数模型为</p>
+<script type="math/tex; mode=display">
+X(k)=\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1)\\Z(k)=H_kX(k)+\Delta(k)</script><p>随机模型为</p>
+<script type="math/tex; mode=display">
+\begin{cases}E[e(k)]=0,cov[e(k),e(j)]=D_e(k)\delta(k-j)\\E[\Delta(k)]=0,cov[\Delta(k),\Delta(j)]=D_\Delta(k)\delta(k-j)\\cov[e(k),\Delta(j)]=0 \end{cases}</script><p>式中，$\Phi_{k,k-1}$为$t_{k-1}$时刻至$t_k$时刻的转移矩阵；$\Gamma_{k,k-1}$为系统噪声驱动阵；$e(k-1)$为系统激励噪声序列；$H_k$为量测矩阵；$\Delta(k)$为量测噪声序列。</p>
+<p>初始状态$X_0$的统计特性为</p>
+<script type="math/tex; mode=display">
+E(X(0))=\hat{X}(0)=\mu_x(0),var(X(0))=D_{\hat{X}}(0)\\cov[X(0),e(k)]=0,cov[X(0),\Delta(k)]=0</script><p>下面给出对状态$X(k)$的卡尔曼滤波估计及其推导过程。</p>
+<h3 id="基于最小方差准则的推导"><a href="#基于最小方差准则的推导" class="headerlink" title="基于最小方差准则的推导"></a>基于最小方差准则的推导</h3><p>1）推导过程</p>
+<p>滤波的一步预测</p>
+<p>与最小二乘估计的数学模型不同的是动态系统的数学描述中增加了状态方程</p>
+<script type="math/tex; mode=display">
+X(k)=\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1)</script><p>状态方程建立了$X(k)$与$X(k-1)$的关系，因此我们可以在得到观测值$Z(k)$前就得到$X(k)$的一些先验信息。由最小方差估计可以根据$k-1$个量测$Z(1),Z(2),\cdots,Z(k-1)$对$X(k)$做最小方差估计，记为$\hat{X}(k,k-1)$</p>
+<script type="math/tex; mode=display">
+\hat{X}(k,k-1)=E[X(k)/Z(1)Z(2)\cdots Z(k-1)]\\=E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]</script><p>上式的条件期望也可表示为</p>
+<script type="math/tex; mode=display">
+E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]\\=\iint(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))f([x(k-1),e(k-1)/z(1)z(2)\cdots \\z(k-1))dx(k-1)de(k-1)])</script><p>因为知道$e(k-1)$只影响$X(k)$，所以$e(k-1)$与$X(k-1)$以及$Z(1),Z(2),\cdots,Z(k-1)$都不相关，所以</p>
+<script type="math/tex; mode=display">
+f([x(k-1),e(k-1)]/z(1)z(2)\cdots z(k-1))\\=f(e(k-1))f(x(k-1))/z(1)z(2)\cdots z(k-1))</script><p>此式代入上一式可得</p>
+<script type="math/tex; mode=display">
+E[(\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1))/Z(1)Z(2)\cdots Z(k-1)]\\=\Phi_{k,k-1}E(X(k-1)/Z(1)Z(2)\cdots Z(k-1))</script><p>所以$\hat{X}(k,k-1)$为（$E(e(k-1)=0)$）</p>
+<script type="math/tex; mode=display">
+\hat{X}(k,k-1)=\Phi_{k,k-1}E(X(k-1))/Z(1)Z(2)\cdots Z(k-1)</script><p>由最小方差估计知道，上式中的$E(X(k-1)/Z(1)Z(2)\cdots Z(k-1))$是对$X(k-1)$的最小方差估计，即为$\hat{X}(k-1)$，即有</p>
+<script type="math/tex; mode=display">
+\hat{X}(k,k-1)=\Phi_{k,k-1}\hat{X}(k-1)</script><p>上式表明$Z(1)Z(2)\cdots Z(k-1)$对$X(k)$的最小方差估计$\hat{X}(k,k-1)$为状态转移矩阵$\Phi_{k,k-1}$乘以最小方差估计$\hat{X}(k-1)$。$\hat{X}(k,k-1)$为未有观测值$Z(k)$前对$X(k)$的预测，称为$X(k)$的一步预测，其预测误差为</p>
+<script type="math/tex; mode=display">
+\Delta\hat{X}(k,k-1)=X(k)-\hat{X}(k,k-1)\\=\Phi_{k,k-1}X(k-1)+\Gamma_{k,k-1}e(k-1)-\Phi_{k,k-1}\hat{X}(k-1)\\=\Phi_{k,k-1} \Delta\hat{X}(k-1)+\Gamma_{k,k-1}e(k-1)</script><p>其中</p>
+<script type="math/tex; mode=display">
+\Delta\hat{X}(k-1)=X(k-1)-\hat{X}(k-1)</script><p>$\Delta\hat{X}(k,k-1)$的期望为</p>
+<script type="math/tex; mode=display">
+E(\Delta\hat{X}(k,k-1))=\Phi_{k,k-1} E(\Delta\hat{X}(k-1))+\Gamma_{k,k-1}E(e(k-1))</script><p> 因为$E(e(k-1))=0$，$E(\Delta\hat{X}(k-1))$=0（后面证明$\hat{X}(k-1)$是$X(k-1)$的无偏估计），所以有</p>
+<script type="math/tex; mode=display">
+E(\Delta\hat{X}(k,k-1))=0</script><p>即</p>
+<script type="math/tex; mode=display">
+E(\hat{X}(k,k-1))=E(X(k))</script><p>即证明得到 $\hat{X}(k,k-1)$ 是$X(k)$的无偏估计。</p>
+<p>滤波的测量更新</p>
+<p>将一步预测$\hat{X}(k,k-1)$代入观测方程，忽略观测误差可以得到观测值$Z(k)$的预测值</p>
+<script type="math/tex; mode=display">
+\hat{Z}(k,k-1)=H_k\hat{X}(k,k-1)</script><p>预测值与实际观测值的差异为</p>
+<script type="math/tex; mode=display">
+V_z(k,k-1)=Z(k)-\hat{Z}(k,k-1)\\=H_kX(k)+\Delta(k)-H_k\hat{X}(k,k-1)\\=H_k\Delta\hat{X}(k,k-1)+\Delta(k)</script><p>$V_z(k,k-1)$在滤波理论中称为预测残差（也称新息）。从上式可以看出，预测残差包含一步预测误差和观测误差。$V_z(k,k-1)$的期望为</p>
+<script type="math/tex; mode=display">
+E(V_z(k,k-1))=H_kE(\Delta\hat{X}(k,k-1))+E(\Delta(k))</script><p>因为$E(e(k-1))$为零，$\Delta\hat{X}(k,k-1)$的期望也为零，所以</p>
+<script type="math/tex; mode=display">
+E(V_z(k,k-1))=0</script><p>若将$V_z(k,k-1)$看作观测值，那么式子</p>
+<script type="math/tex; mode=display">
+V_z(k,k-1)=H_k\Delta\hat{X}(k,k-1)+\Delta(k)</script><p>就是将$\Delta\hat{X}(k,k-1)$视为未知参数的新的观测方程，其中</p>
+<script type="math/tex; mode=display">
+E[\Delta(k)]=0,cov[\Delta(k)]=D_\Delta(k)\\E(\Delta\hat{X}(k,k-1))=0,cov(\Delta\hat{X}(k,k-1))=D_{\hat{X}(k,k-1)}</script><p>根据线性最小方差估计理论可以直接得到$\Delta\hat{X}(k,k-1)$的线性最小方差估计，记为$\Delta\hat{\hat{X}}(k,k-1)$，其值为</p>
+<script type="math/tex; mode=display">
+\Delta\hat{\hat{X}}(k,k-1)=E(\Delta\hat{X}(k,k-1))\\+D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}(V_z(k,k-1)-H_kE(\Delta\hat{X}(k,k-1)))</script><p>由于</p>
+<script type="math/tex; mode=display">
+E(\Delta\hat{X}(k,k-1))=0</script><p>有</p>
+<script type="math/tex; mode=display">
+\Delta\hat{\hat{X}}(k,k-1)=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}V_z(k,k-1)</script><p>又因为</p>
+<script type="math/tex; mode=display">
+X(k)=\Delta\hat{X}(k,k-1)+\hat{X}(k,k-1)</script><p>所以用$\Delta\hat{X}(k-1)$的线性最小方差估计值$\Delta\hat{\hat{X}}(k,k-1)$替代上式中的$\Delta\hat{X}(k-1)$可以得到由$V_z(k,k-1)$对$X(k)$的估计$\hat{X}(k)$ </p>
+<script type="math/tex; mode=display">
+\hat{X}(k)=\Delta\hat{X}(k,k-1)+\hat{X}(k,k-1)\\=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}V_z(k,k-1)+\hat{X}(k,k-1)</script><p>由于$V_z(k,k-1)$是由观测值$z(k)$得到，具有观测值的信息，所以上式即为观测值对$\hat{X}(k,k-1)$ 的更新，记</p>
+<script type="math/tex; mode=display">
+K_k=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}</script><p>有</p>
+<script type="math/tex; mode=display">
+\hat{X}(k)=K_kV_z(k,k-1)+\hat{X}(k,k-1)\\=\hat{X}(k,k-1)+K_k(Z(k)-H_k\hat{X}(k,k-1))</script><p>至此，我们得到了对$X(k)$的一步预测和测量更新估计的递推公式。</p>
+<script type="math/tex; mode=display">
+\begin{cases}\hat{X}(k,k-1)=\Phi_{k,k-1}\hat{X}(k-1)\\ \hat{X}(k)=\hat{X}(k,k-1)+K_k(Z(k)-H_k\hat{X}(k,k-1))\end{cases}</script><p>$\hat{X}(k)$的期望为</p>
+<script type="math/tex; mode=display">
+E(\hat{X}(k))=K_kE(V_z(k,k-1))+E(\hat{X}(k,k-1))=E(\hat{X}(k,k-1))=E(X(k))</script><p>即$X(k)$的观测值更新为无偏估计。</p>
+<p>以上就是根据最小方差准则得到的卡尔曼滤波器。卡尔曼滤波器还可以用正交投影法和递推最小二乘准则推导，正交投影推导可以使我们看到卡尔曼滤波器的数学内涵：$\hat{X}(k)$是$X(k)$在$Z(k)$上的正交投影，在递推最小二乘的推导中，将一步预测的$\hat{X}(k,k-1)$看作虚拟观测值，与$Z(k)$一并组成观测方程进行最小二乘平差，最后得到的$X(k)$与最小方差估计$\hat{X}(k)$相等，这也说明卡尔曼滤波估计是残差平方和最小的估计。</p>
+<p>2）观测值逐次更新</p>
 <p>观测值相互独立</p>
 <p>观测值相互关联</p>
-<p>4）应用</p>
 <h3 id="滤波器稳定性判别"><a href="#滤波器稳定性判别" class="headerlink" title="滤波器稳定性判别"></a>滤波器稳定性判别</h3><p>1）稳定性</p>
 <p>2）判别法</p>
 <h3 id="线性离散系统的最优预测与平滑"><a href="#线性离散系统的最优预测与平滑" class="headerlink" title="线性离散系统的最优预测与平滑"></a>线性离散系统的最优预测与平滑</h3><p>1）最优预测</p>

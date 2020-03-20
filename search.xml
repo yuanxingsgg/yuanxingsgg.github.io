@@ -3,21 +3,104 @@
   <entry>
     <title>留言板</title>
     <url>/2020/03/19/%E7%95%99%E8%A8%80%E6%9D%BF/</url>
-    <content><![CDATA[<p>这是一个留言版<br><a id="more"></a><br><img src="/2020/03/19/%E7%95%99%E8%A8%80%E6%9D%BF/2.jpg" alt="logo"><br><img src="/2020/03/19/%E7%95%99%E8%A8%80%E6%9D%BF/1.jpg" alt="logo"></p>
+    <content><![CDATA[<p>这是一个留言板<br><a id="more"></a><br><img src="/2020/03/19/%E7%95%99%E8%A8%80%E6%9D%BF/2.jpg" alt="logo"></p>
 ]]></content>
-      <categories>
-        <category>留言版</category>
-      </categories>
-      <tags>
-        <tag>留言板</tag>
-      </tags>
   </entry>
   <entry>
     <title>最优估计学习备忘四</title>
     <url>/2020/03/19/%E6%9C%80%E4%BC%98%E4%BC%B0%E8%AE%A1%E5%AD%A6%E4%B9%A0%E5%A4%87%E5%BF%98%E5%9B%9B/</url>
-    <content><![CDATA[<h1 id="线性卡尔曼滤波的实施"><a href="#线性卡尔曼滤波的实施" class="headerlink" title="线性卡尔曼滤波的实施"></a>线性卡尔曼滤波的实施</h1><p>在理想的情况下，如果数学模型与物理现实一致，卡尔曼滤波得到的是无偏线性最小方差估计，而且随着测量数据的增加，卡尔曼滤波估计逐渐趋近状态的期望，误差方差逐渐趋于稳态值。但在实际应用中卡尔曼滤波会出现各种问题，最常见的是滤波估计值偏离实际的状态值，如果随着时间的推移这种偏离越来越大甚至趋于无穷大，就称滤波发生了发散。同时一般在滤波估计发生偏移和发散时，滤波估计的方差也发生偏移和发散。</p>
-<p>滤波发散的原因有三个，一是模型发散，即系统的数学模型不是一致完全可控和一致完全可测的，滤波不具有一致渐进稳定性，抑制模型发散的基本方法是改变系统的结构及参数，使系统在随机作用下有一致完全可控可测；二是数值发散，由于计算机的字长是有限的，这就使得滤波递推中的每一步计算都有截断误差，这使得误差方差逐渐失去正定性甚至对称性，滤波增益的计算值与理论值的差异越来越大，从而导致发散，抑制数值发散的最基本方法是采用双字长运算，这样可以有效减少数字的损失，对于滤波问题，抑制数值发散还可以在滤波过程中将方差阵分解（使用平方根滤波、$UDU^T$分解滤波），通过分解后的矩阵代替原来的方差矩阵进行递推，此外当滤波的方差很大甚至无穷大时，将导致滤波无法计算，这时可将方差的逆矩阵来代替原方差进行滤波递推（信息滤波）；三是由于对物理现实认识不足，对实际系统的过程缺乏完整的了解或足够的统计数据，是建立了不准确的数学模型，针对此类问题，可使用有色噪声下卡尔曼滤波（将有色噪声转化为白噪声）、扩展的卡尔曼滤波（一定程度上减小方程线性化带来的模型误差）、自适应的卡尔曼滤波（实时地调整和修正系统模型和噪声地方差矩阵，以达到模型地自适应地与现实相吻合）来解决对应的问题。</p>
-<h2 id="平方根滤波"><a href="#平方根滤波" class="headerlink" title="平方根滤波"></a>平方根滤波</h2>]]></content>
+    <content><![CDATA[<h1 id="线性卡尔曼滤波的实施"><a href="#线性卡尔曼滤波的实施" class="headerlink" title="线性卡尔曼滤波的实施"></a>线性卡尔曼滤波的实施</h1><p>在理想的情况下，如果数学模型与物理现实一致，卡尔曼滤波得到的是无偏线性最小方差估计，而且随着测量数据的增加，卡尔曼滤波估计逐渐趋近状态的期望，误差方差逐渐趋于稳态值。但在实际应用中卡尔曼滤波会出现各种问题，最常见的是滤波估计值偏离实际的状态值，如果随着时间的推移这种偏离越来越大甚至趋于无穷大，就称滤波发生了发散。同时一般在滤波估计发生偏移和发散时，滤波估计的方差也发生偏移和发散。<br><a id="more"></a><br>滤波发散的原因有三个，一是模型发散，即系统的数学模型不是一致完全可控和一致完全可测的，滤波不具有一致渐进稳定性，抑制模型发散的基本方法是改变系统的结构及参数，使系统在随机作用下有一致完全可控可测；二是数值发散，由于计算机的字长是有限的，这就使得滤波递推中的每一步计算都有截断误差，这使得误差方差逐渐失去正定性甚至对称性，滤波增益的计算值与理论值的差异越来越大，从而导致发散，抑制数值发散的最基本方法是采用双字长运算，这样可以有效减少数字的损失，对于滤波问题，抑制数值发散还可以在滤波过程中将方差阵分解（使用平方根滤波、$UDU^T$分解滤波），通过分解后的矩阵代替原来的方差矩阵进行递推，此外当滤波的方差很大甚至无穷大时，将导致滤波无法计算，这时可将方差的逆矩阵来代替原方差进行滤波递推（信息滤波）；三是由于对物理现实认识不足，对实际系统的过程缺乏完整的了解或足够的统计数据，是建立了不准确的数学模型，针对此类问题，可使用有色噪声下卡尔曼滤波（将有色噪声转化为白噪声）、扩展的卡尔曼滤波（一定程度上减小方程线性化带来的模型误差）、自适应的卡尔曼滤波（实时地调整和修正系统模型和噪声地方差矩阵，以达到模型地自适应地与现实相吻合）来解决对应的问题。</p>
+<h2 id="平方根滤波"><a href="#平方根滤波" class="headerlink" title="平方根滤波"></a>平方根滤波</h2><p>由于计算机舍入误差的存在，使得滤波方差矩阵$D_{\hat{X}}(k,k-1)$和$D_{\hat{X}}(k)$的数值失去非负定性甚至失去对称性，从而导致$K_k$的计算失真，并产生发散现象。计算误差主要是由于过大的数值与过小的数值相加减过程中造成的，为了避免运算过程中的数值过大或过小，我们可以将其平方根分解（对数值开方，例如0.01开方成0.1）。在卡尔曼滤波递推计算中，我们可以对方差矩阵做平方根分解，对称正定矩阵$D$可以唯一地分解为一个下三角矩阵$S$及其转置$S^T$的乘积，即$D=SS^T$，矩阵$S$即为矩阵$D$的平方根矩阵。在计算矩阵$S$只需要保留矩阵$D$一半的字长，$SS^T$就可以达到很高的精度。正定矩阵可使用$Cholesky$分解法。</p>
+<p>首先将状态方差矩阵做平方根分解：</p>
+<script type="math/tex; mode=display">
+D_{\hat{X}}=S_kS_k^T，D_{\hat{X}}(k,k-1)=S_{k,k-1}S_{k,k-1}^T</script><p>然后在卡尔曼滤波的基本方程中，以$S_k$和$S_{k.k-1}$的递推关系式来代替原来的$D_{\hat{X}}$和$D_{\hat{X}}(k,k-1)$</p>
+<p>的递推关系式，这样就可以保证方差矩阵在任意时刻都是对称非负定的。这里不加推导地给出平方根滤波递推公式</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>一步预测</th>
+<th>状态预测</th>
+<th>$\hat{X}(k,k-1)=\Phi_{k,k-1}\hat{X}(k-1)$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>预测方差</td>
+<td>$D_{\hat{X}}(k,k-1)=S_{k,k-1}S_{k,k-1}^T$</td>
+</tr>
+<tr>
+<td>测量更新</td>
+<td>状态滤波</td>
+<td>$\begin{cases}\hat{X}^0(k)=\hat{X}(k-1) \\ S_k^0=S_{k,k-1} \end{cases}$，$\hat{X}^j=\hat{X}^{j-1}(k)+K_k^j(Z_j(k)-h_j^k\hat{X}^{j-1}(j=1,2,\cdots,l)$</td>
+</tr>
+<tr>
+<td></td>
+<td>增益矩阵</td>
+<td>$a_k=(h_k^1S_k^{j-1})，b_k=[(a_k)^Ta_k+D_\Delta^j(k)]，K_k^{j}=b_k^{-1}S_k^{j-1}a_k^T$</td>
+</tr>
+<tr>
+<td></td>
+<td>平方根</td>
+<td>$S_k^j=S_k^{j-1}-\frac{(b_k+\sqrt(D_\Delta^j(k)b_k)}{a_k^Ta_k}K_k^ja_k^T$</td>
+</tr>
+<tr>
+<td></td>
+<td>滤波方差</td>
+<td>$D_{\hat{X}(k)}=S_kS_k^T,S_k=S_k^l$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>矩阵分解地方法有多种，除了可以对方差矩阵$D_{\hat{X}}(k,k-1)$和$D_{\hat{X}}(k)$进行平方根分解外，还可以对其进行$UDU^T$分解来传递方差。</p>
+<h2 id="扩展的卡尔曼滤波"><a href="#扩展的卡尔曼滤波" class="headerlink" title="扩展的卡尔曼滤波"></a>扩展的卡尔曼滤波</h2><p>对线性模型而言，卡尔曼滤波估计是最优估计，但严格地说现实中的系统并非都是线性的，由于对非线性模型的估计难度大大增加，所以通常将非线性模型线性化后进行卡尔曼滤波估计，所以这样得到的估计实际上是一种近似估计方法。这里介绍的扩展的卡尔曼滤波$EKF$将非线性模型中的状态方程在$\hat{X}(k-1)$处用泰勒公式展开并舍去二阶项和高阶项进行线性化；将观测方程在$\hat{X}(k,k-1)$处用泰勒公式展开并舍去二阶项和高阶项进行线性化，然后用线性系统的卡尔曼滤波公式进行估计。</p>
+<p>非线性离散时间系统</p>
+<script type="math/tex; mode=display">
+X(k)=f(X(k-1),e(k-1))\\Z(k)=h(X(k))+\Delta(k)</script><p>随机模型</p>
+<script type="math/tex; mode=display">
+E[e(k)]=0，E[\Delta(k)]=0,\\cov[e(k)，e(j)]=D_e(k)\delta(k-j)\\cov[ \Delta(k)，\Delta(j)]=D_e(k)\delta(k-j)\\cov[e(k),\Delta(j)]=0</script><p>初始状态为</p>
+<script type="math/tex; mode=display">
+E[X(0)]=\mu_X(0)，var[X(0)]=D_X(0)</script><p>现在将状态方程在近似值$X_{(0)}(k-1)$和$e(k-1)=0$处用泰勒公式展开并舍去高阶项</p>
+<script type="math/tex; mode=display">
+X(k)=f(X_{(0)}(k-1),0)+\frac{\partial f}{\partial X(k-1)}\mid_{X(k-1)=X_{(0)}(k-1)\\e(k-1)=0}(X(k-1))-X_{0}(k-1)\\+\frac{\partial f}{\partial e(k-1)}\mid_{X(k-1)=X_{(0)}(k-1)\\e(k-1)=0}(e(k-1))</script><p>令</p>
+<script type="math/tex; mode=display">
+\frac{\partial f}{\partial X(k-1)}\mid_{X(k-1)=X_{(0)}(k-1)\\e(k-1)=0})=\Phi_{k,k-1}</script><script type="math/tex; mode=display">
+\frac{\partial f}{\partial e(k-1)}\mid_{X(k-1)=X_{(0)}(k-1)\\e(k-1)=0})=\Gamma(k-1)</script><script type="math/tex; mode=display">
+\eta(k-1)=\Gamma(k-1)e(k-1)</script><p>有线性化后的状态方程</p>
+<script type="math/tex; mode=display">
+X(k)=\Phi_{k,k-1}X(k-1)+[f(X_{(o)}(k-1),0)-\Phi_{k,k-1}X_{(o)}(k-1)]+\eta(k-1)</script><p>将观测方程在近似值$X_{(0)}(k)$处用泰勒公式展开并舍去高阶项有</p>
+<script type="math/tex; mode=display">
+Z(k)=\frac{\partial f}{\partial X(k)}\mid_{X(k)=X_{(0)}(k)}(X_k-X_{(0)}(k))+h(X_{(0)}(k))+\Delta(k)</script><p>设</p>
+<script type="math/tex; mode=display">
+H(k)=\frac{\partial f}{\partial X(k)}\mid_{X(k)=X_{(0)}(k)}</script><p>则有线性化后的观测方程</p>
+<script type="math/tex; mode=display">
+Z(k)=H(k)X_k[h(X_{(0)}(k))-H(k)X_{(0)}(k)]+\Delta(k)</script><p>这时的随机模型为</p>
+<script type="math/tex; mode=display">
+E[\eta(k)]=0,E[\Delta(k)]=0\\cov[\eta(k),\eta(j)]=\Gamma(k)D_e(k)\Gamma^T(k)\delta(k-j)\\cov[\Delta(k),\Delta(j)]=\Gamma(k)D_{\Delta}(k)\delta(k-j)\\cov[\eta(k),\Delta(j)=0]</script><p>以上线性化模型的卡尔曼滤波为</p>
+<p>1）一步预测</p>
+<script type="math/tex; mode=display">
+\hat{X}(k)=\Phi_{k,k-1}\hat{X}(k-1)+f(X_{(o)}(k-1),0)-\Phi_{k,k-1}X_{(o)}(k-1)</script><p>若取$X_{(0)}(k-1)=\hat{X}(k-1)$并代入上式得到</p>
+<script type="math/tex; mode=display">
+\hat{X}(k,k-1)=f(\hat{X}(k-1),0)</script><p>其方差为</p>
+<script type="math/tex; mode=display">
+D_{\hat{X}}(k,k-1)=\Phi_{k,k-1}D_{\hat{X}(k-1)}\Phi_{k,k-1}^T+\Gamma(k-1)D_{e(k-1)}\Gamma(k-1)^T</script><p>预测残差为</p>
+<script type="math/tex; mode=display">
+V_z(k)=Z(k)-[H(k)\hat{X}(k,k-1)+[h(X_{(0)}(k))-H(k)X_{(0)}(k)]]</script><p>若取$X_{(0)}(k)=\hat{X}(k,k-1)$并代入上式得到</p>
+<script type="math/tex; mode=display">
+V_z(k)=Z(k)-h(\hat{X}(k,k-1))</script><p>测量更新</p>
+<script type="math/tex; mode=display">
+\hat{X}(k)=X(k,k-1)+K_kV_z(k)\\D_{\hat{X}}(k)=(I-K_kH_k)D_{\hat{X}}(k,k-1)</script><p>增益矩阵</p>
+<script type="math/tex; mode=display">
+K_k=D_{\hat{X}}(k,k-1)H_k^T[H_kD_{\hat{X}}H_k^T+D_{\Delta}(k)]^{-1}</script><p>扩展的卡尔曼滤波将非线性的状态方程在$\hat{X}(k-1)$处进行线性化，将观测方程在$\hat{X}(k,k-1)$处线性化，用线性卡尔曼滤波进行估计，虽然从估计公式上看体现出了非线性函数，但实质仍然是线性估计。</p>
+]]></content>
+      <categories>
+        <category>最优估计</category>
+      </categories>
+      <tags>
+        <tag>最优估计</tag>
+        <tag>笔记</tag>
+      </tags>
   </entry>
   <entry>
     <title>最优估计学习备忘三</title>
@@ -91,19 +174,12 @@ K_k=D_{\hat{X}}(k,k-1)H_k^T(H_kD_{\hat{X}}(k,k-1)H_k^T+D_{\Delta}(k))^{-1}</scri
 <script type="math/tex; mode=display">
 E(\hat{X}(k))=K_kE(V_z(k,k-1))+E(\hat{X}(k,k-1))=E(\hat{X}(k,k-1))=E(X(k))</script><p>即$X(k)$的观测值更新为无偏估计。</p>
 <p>以上就是根据最小方差准则得到的卡尔曼滤波器。卡尔曼滤波器还可以用正交投影法和递推最小二乘准则推导，正交投影推导可以使我们看到卡尔曼滤波器的数学内涵：$\hat{X}(k)$是$X(k)$在$Z(k)$上的正交投影，在递推最小二乘的推导中，将一步预测的$\hat{X}(k,k-1)$看作虚拟观测值，与$Z(k)$一并组成观测方程进行最小二乘平差，最后得到的$X(k)$与最小方差估计$\hat{X}(k)$相等，这也说明卡尔曼滤波估计是残差平方和最小的估计。</p>
-<p>2）观测值逐次更新</p>
-<p>观测值相互独立</p>
-<p>观测值相互关联</p>
-<h3 id="滤波器稳定性判别"><a href="#滤波器稳定性判别" class="headerlink" title="滤波器稳定性判别"></a>滤波器稳定性判别</h3><p>1）稳定性</p>
-<p>2）判别法</p>
-<h3 id="线性离散系统的最优预测与平滑"><a href="#线性离散系统的最优预测与平滑" class="headerlink" title="线性离散系统的最优预测与平滑"></a>线性离散系统的最优预测与平滑</h3><p>1）最优预测</p>
-<p>2）最优平滑</p>
-<p>固定区间平滑</p>
-<p>固定滞后平滑</p>
-<p>固定点平滑</p>
-<h2 id="线性连续系统的卡尔曼滤波"><a href="#线性连续系统的卡尔曼滤波" class="headerlink" title="线性连续系统的卡尔曼滤波"></a>线性连续系统的卡尔曼滤波</h2><p>1）推导</p>
-<p>2）应用</p>
-]]></content>
+<h3 id="滤波器稳定性判别"><a href="#滤波器稳定性判别" class="headerlink" title="滤波器稳定性判别"></a>滤波器稳定性判别</h3><p>由于滤波方程由系统的状态方程和观测方程给出，滤波的稳定性应该与随机线性系统的结构和参数有关。如果线性系统是随机一致完全可控和随机一致完全可测的，那么卡尔曼滤波器是一致渐进稳定的。</p>
+<p>离散时不变系统一致完全随机可控的条件为</p>
+<script type="math/tex; mode=display">
+rank[\Gamma \quad \Phi\Gamma  \quad  \cdots\quad \Phi^{N-1}\Gamma]=n</script><p>离散时不变系统一致完全随机可测的条件为</p>
+<script type="math/tex; mode=display">
+rank[H \quad H\Phi  \quad  \cdots\quad H\Phi^{N-1}]^T=n</script>]]></content>
       <categories>
         <category>最优估计</category>
       </categories>

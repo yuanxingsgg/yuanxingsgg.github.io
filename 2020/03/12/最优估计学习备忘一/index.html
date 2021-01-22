@@ -30,7 +30,7 @@
 <meta property="og:description" content="基础理论篇最小二乘估计1）最小二乘估计方法由德国数学家高斯提出，估计准则为残差（测绘中称为改正数）的平方和达到最小。假定有一个数学模型为  Z_{l×1}&#x3D;H_{l×n}X_{n×1}+\nabla_{l×1} \quad (1.1) E(Z)&#x3D;HX \quad var(Z)&#x3D;D \quad (1.2)若现在通过某种方法得到参数估计$\hat{X}$，代入观测方程后可得到估计的观测值：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-12T07:03:51.000Z">
-<meta property="article:modified_time" content="2020-03-18T06:43:13.635Z">
+<meta property="article:modified_time" content="2021-01-22T04:52:39.040Z">
 <meta property="article:author" content="Li">
 <meta property="article:tag" content="最优估计">
 <meta property="article:tag" content="笔记">
@@ -229,7 +229,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-18 14:43:13" itemprop="dateModified" datetime="2020-03-18T14:43:13+08:00">2020-03-18</time>
+                <time title="修改时间：2021-01-22 12:52:39" itemprop="dateModified" datetime="2021-01-22T12:52:39+08:00">2021-01-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -338,7 +338,7 @@ H^TWH\hat{x}_{LS}-H^TWz+C^TK=0</script><p>与约束条件联立有</p>
 <script type="math/tex; mode=display">
 \begin{bmatrix}H^TWH&C^T\\C&0\end{bmatrix}\begin{bmatrix}\hat{x}_{LS}\\K\end{bmatrix}=\begin{bmatrix}H^TWz\\-\varphi(X_0)\end{bmatrix}</script><p>解得附有约束条件的最小二乘估计 $\hat{x}_{LS}$</p>
 <script type="math/tex; mode=display">
-\begin{cases}K=(C(H^TWH)^{-1}C^T)^{-1}(C(H^TWH)^{-1}HWz+\varphi(X_0))\\\hat{x}_{LS}=((H^TWH)^{-1}-(H^TWH)^{-1}C^T(C(H^TWH)^{-1}C^T)^{-1}C(H^TWH)^{-1})HWz\\-(H^TWH)^{-1}C^TC(H^TWH)^{-1}C^T)^{-1}\varphi(X_0)\end{cases}</script><p>3）递推最小二乘估计</p>
+\begin{cases}K=(C(H^TWH)^{-1}C^T)^{-1}(C(H^TWH)^{-1}H^TWz+\varphi(X_0))\\\hat{x}_{LS}=((H^TWH)^{-1}-(H^TWH)^{-1}C^T(C(H^TWH)^{-1}C^T)^{-1}C(H^TWH)^{-1})HWz\\-(H^TWH)^{-1}C^TC(H^TWH)^{-1}C^T)^{-1}\varphi(X_0)\end{cases}</script><p>3）递推最小二乘估计</p>
 <p>上面介绍得两种最小二乘估计方法是集中所有观测值对参数进行估计得方法，即批处理方法。该方法会占用计算机的大量内存，不能实时对数据进行处理，解决这个问题的方法是采用最小二乘的递推算法。</p>
 <p>设在第$k$次观测后，观测值$z_k$对应的误差方程为</p>
 <script type="math/tex; mode=display">
@@ -560,13 +560,13 @@ f_{Z/X}(z/x) ×f_x(x)\mid_{x=\hat{x}_{MAP}}=max</script><h2 id="各个估计方�
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -605,7 +605,7 @@ f_{Z/X}(z/x) ×f_x(x)\mid_{x=\hat{x}_{MAP}}=max</script><h2 id="各个估计方�
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

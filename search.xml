@@ -115,11 +115,11 @@ J=-\frac {\partial I_2}{\partial u}\frac {\partial u}{\partial {\delta \xi}}</sc
 <p>可以看到，从稀疏到稠密重构，都可以用直接法计算。它们的计算量是逐渐增长的。稀疏方法可以快速地求解相机位姿，而稠密方法可以建立完整地图。</p>
 ]]></content>
       <categories>
-        <category>最优估计</category>
+        <category>视觉SLAM</category>
       </categories>
       <tags>
-        <tag>最优估计</tag>
         <tag>笔记</tag>
+        <tag>SLAM</tag>
       </tags>
   </entry>
   <entry>
@@ -444,7 +444,7 @@ H^TWH\hat{x}_{LS}-H^TWz+C^TK=0</script><p>与约束条件联立有</p>
 <script type="math/tex; mode=display">
 \begin{bmatrix}H^TWH&C^T\\C&0\end{bmatrix}\begin{bmatrix}\hat{x}_{LS}\\K\end{bmatrix}=\begin{bmatrix}H^TWz\\-\varphi(X_0)\end{bmatrix}</script><p>解得附有约束条件的最小二乘估计 $\hat{x}_{LS}$</p>
 <script type="math/tex; mode=display">
-\begin{cases}K=(C(H^TWH)^{-1}C^T)^{-1}(C(H^TWH)^{-1}HWz+\varphi(X_0))\\\hat{x}_{LS}=((H^TWH)^{-1}-(H^TWH)^{-1}C^T(C(H^TWH)^{-1}C^T)^{-1}C(H^TWH)^{-1})HWz\\-(H^TWH)^{-1}C^TC(H^TWH)^{-1}C^T)^{-1}\varphi(X_0)\end{cases}</script><p>3）递推最小二乘估计</p>
+\begin{cases}K=(C(H^TWH)^{-1}C^T)^{-1}(C(H^TWH)^{-1}H^TWz+\varphi(X_0))\\\hat{x}_{LS}=((H^TWH)^{-1}-(H^TWH)^{-1}C^T(C(H^TWH)^{-1}C^T)^{-1}C(H^TWH)^{-1})HWz\\-(H^TWH)^{-1}C^TC(H^TWH)^{-1}C^T)^{-1}\varphi(X_0)\end{cases}</script><p>3）递推最小二乘估计</p>
 <p>上面介绍得两种最小二乘估计方法是集中所有观测值对参数进行估计得方法，即批处理方法。该方法会占用计算机的大量内存，不能实时对数据进行处理，解决这个问题的方法是采用最小二乘的递推算法。</p>
 <p>设在第$k$次观测后，观测值$z_k$对应的误差方程为</p>
 <script type="math/tex; mode=display">
